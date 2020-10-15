@@ -24,6 +24,7 @@ int main(int argc, char** argv)
         return 2;
     }
     make_julia_set(start_real, start_image, interval, real_count, image_count, julia_set, c_real, c_image);
-    
+    fwrite(julia_set, sizeof(char), real_count * image_count, fp);
+    fclose(fp);
     return 0;
 }
