@@ -8,7 +8,7 @@ double image : ジュリア集合に含まれるかを判定したい複素数�
 double c_real : 定数部の実部
 double c_image : 定数部の虚部
 */
-int is_divergence(double real, double image, double c_real, double c_image);
+char is_divergence(double real, double image, double c_real, double c_image);
 
 /*
 make_julia_set
