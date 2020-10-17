@@ -9,9 +9,9 @@ int main(int argc, char** argv)
     char* julia_set = NULL;
     char* file_name = "dump_julia_result.bin";
     FILE* fp = NULL;
-    int real_count = ((int)end_real - (int)start_real) / interval;
+    int real_count = ((int)end_real - (int)start_real) / interval + 1;
     int image_count = ((int)end_image - (int)start_image) / interval;
-    julia_set = (char*)malloc((real_count * image_count) + 1);
+    julia_set = (char*)malloc(((real_count) * image_count) + 1);
     fp = fopen(file_name, "w");
     if(fp == NULL)
     {
