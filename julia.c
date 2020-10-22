@@ -14,10 +14,11 @@ char is_divergence(double real, double image, double c_real, double c_image)
     for(iter = 0; iter < CONTINUE_TIME; ++iter)
     {
         //次項を実部と虚部に分けて求める
-        m_real = (m_real * m_real) - (m_image * m_image) + c_real;
-        m_image = (2 * m_real * m_image + c_image);
+        double next_m_real = (m_real * m_real) - (m_image * m_image) + c_real;
+        double next_m_image = (2 * m_real * m_image + c_image);
         //もし、発散するようならば、途中で計算を打ち切る
-        if((m_real * m_real + m_image * m_image) > 4.0) result = '0';break;
+        if((next_m_real * next_m_real + next_m_image * next_m_image) > 4.0) result = '0';break;
+        m_real = next_m_real; m_image = next_m_image;
     }
     return result;
 }
