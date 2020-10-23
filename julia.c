@@ -9,16 +9,16 @@ int is_divergence(double real, double image, double c_real, double c_image)
     double m_real = real; //実部
     double m_image = image; //虚部
     int iter = 0; //イテレータ
-    int result = 1; //戻り値
     for(iter = 0; iter < CONTINUE_TIME; ++iter)
     {
         //次項を実部と虚部に分けて求める
-        m_real = (m_real * m_real) - (m_image * m_image) + c_real;
-        m_image = (2 * m_real * m_image + c_image);
+        double next_real = (m_real * m_real) - (m_image * m_image) + c_real;
+        double next_image = (2.0 * m_image * m_real) + c_image;
         //もし、発散するようならば、途中で計算を打ち切る
-        if((m_real * m_real + m_image * m_image) > 2) result = 0;break;
+        if((next_real * next_real + next_image * next_image) > 4.0)break;
+        m_real = next_real; m_image = next_image;
     }
-    return result;
+    return iter;
 }
 
 void make_julia_set(double real_start, double image_start, double interval,int real_count, int image_count, char* result_julia, double c_real, double c_image)
