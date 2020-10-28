@@ -5,38 +5,48 @@
 
 #define CONTINUE_TIME 50
 
-char is_divergence(double real, double image, double c_real, double c_image)
+double is_divergence(double real, double image, double c_real, double c_image)
 {
     double m_real = real; //実部
     double m_image = image; //虚部
     int iter = 0; //イテレータ
-    char result = '1'; //戻り値
     for(iter = 0; iter < CONTINUE_TIME; ++iter)
     {
         //次項を実部と虚部に分けて求める
         double next_m_real = (m_real * m_real) - (m_image * m_image) + c_real;
-        double next_m_image = (2 * m_real * m_image + c_image);
+        double next_m_image = (2.0 * m_real * m_image + c_image);
         //もし、発散するようならば、途中で計算を打ち切る
-        if((next_m_real * next_m_real + next_m_image * next_m_image) > 4.0) result = '0';break;
+        if(sqrt(next_m_real * next_m_real + next_m_image * next_m_image) > 4.0)break;
         m_real = next_m_real; m_image = next_m_image;
     }
-    return result;
+    return ((double)(iter)) / ((double)CONTINUE_TIME);
 }
 
-void make_julia_set(double real_start, double image_start, double interval,int real_count, int image_count, char* result_julia, double c_real, double c_image)
+double min(int x, int y)
 {
-    double m_real = real_start, m_image = image_start;
-    int real_max = real_count, image_max = image_count;
-    int real_index = 0, image_index = 0;
-    for(real_index = 0 ; real_index < real_max - 1; ++real_index)
+    return x > y ? x : y;
+}
+
+void make_julia_set(int width, int height, double c_real, double c_image)
+{
+    double x = 0.0;
+    double y = 0.0;
+    double* recode = malloc(sizeof(double) * width * height);
+    for(int i = 0; i < width * height + 1; ++i)
     {
-        for(image_index = 0; image_index < image_max; ++image_index)
-        {
-            result_julia[real_index + (image_index * real_max)] = (char)is_divergence(m_real + (real_index * interval), m_image + (image_index * interval), c_real, c_image);
-        }
+        double x = ((double)(i % width) * 2 - width) / (double)min(width, height);
+        double y = ((double)(i / width) * 2 - height) / (double)min(width, height);
+        recode[i] = is_divergence(x, y, c_real, c_image);
     }
-    for(image_index = 0; image_index < image_max; ++image_index)
+    FILE* fp = fopen("result.dat", "wb");
+    if(fp == NULL)
     {
-        result_julia[real_max - 1 + (image_index * real_max)] = '\n';
+        fprintf(stderr, "Can't open file.\n");
+        return;
     }
+    fwrite(&width, sizeof(width), 1, fp);
+    fwrite(&height, sizeof(height), 1, fp);
+    fwrite(recode, sizeof(recode[0]), width * height, fp);
+    free(recode);
+    fclose(fp);
 }
