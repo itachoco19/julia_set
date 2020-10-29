@@ -11,12 +11,14 @@ def main():
     size = struct.unpack_from(endian + "ii", fd.read(), 0)
     fd.seek(0)
     data = struct.unpack_from(endian + ("d" * (size[0] * size[1])), fd.read(), 8)
+    fig, ax = plt.subplots(1, 1, figsize=(1, 1))
+    shape_data = list()
     for i in range(size[1]):
-        for j in range(size[0]):
-            x = float(j * 2 - size[0]) / float(min(size[0], size[1]))
-            y = float(i * 2 - size[1]) / float(min(size[0], size[1]))
-            print(j + i * size[0])
-            plt.scatter(x, y, norm=data)
+        c_data = [data[j + i * size[0]] for j in range(size[0])]
+        shape_data.append(c_data)
+        print(str(i) + " line is finished.")
+    ax.imshow(shape_data, cmap=plt.cm.hot,interpolation='bilinear')
+    #plt.scatter(x, y, norm=data)
     plt.show()
 
 if __name__ == "__main__":
