@@ -9,7 +9,7 @@ int main(int argc, char** argv)
     int height = atoi(argv[2]);
     double start, time;
     start = MPI_Wtime();
-    make_julia_set(width, height, -0.8, 0.1);
+    make_julia_set(width, height, -0.8, 0.15);
     time = MPI_Wtime() - start;
     printf("time : %lfsec.\n", time);
     return 0;
