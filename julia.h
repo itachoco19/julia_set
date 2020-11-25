@@ -22,5 +22,6 @@ double c_real : 定数項の実部
 double c_image : 定数項の虚部
 */
 void make_julia_set(int width, int height, double c_real, double c_image);
+void make_julia_mpi(int width, int height, double c_real, double c_image, int process_number);
 
 #endif
